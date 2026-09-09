@@ -82,6 +82,28 @@
   .back-to-top:active{transform:scale(0.92);}
   .back-to-top svg{width:20px;height:20px;}
 
+  .toast-container{
+    position:fixed;bottom:24px;left:50%;
+    transform:translateX(-50%);
+    display:flex;flex-direction:column-reverse;gap:8px;
+    z-index:40;
+    align-items:center;
+    pointer-events:none;
+  }
+  .toast{
+    background:rgba(15,13,10,0.97);
+    border:1px solid var(--border);
+    border-left:3px solid var(--brass-bright);
+    color:var(--ink);
+    padding:12px 18px;
+    font-size:0.88rem;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity 0.25s ease, transform 0.25s ease;
+    white-space:nowrap;
+  }
+  .toast.is-visible{opacity:1;transform:none;}
+
   header{
     position:sticky;top:0;z-index:20;
     background:rgba(12,11,9,0.86);
@@ -185,11 +207,34 @@
   @keyframes unmask{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
   @keyframes riseIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
   @keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.04);}100%{transform:scale(1);}}
-  .copy-btn[data-copied="true"]{animation:pulse 0.35s ease;}
 
-  .breadcrumb{padding:22px 0 0;font-size:0.9rem;}
-  .breadcrumb a{color:var(--ink-dim);text-decoration:none;}
-  .breadcrumb a:hover{color:var(--brass-bright);}
+  .breadcrumb-row{
+    padding:22px 0 0;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:12px;
+  }
+  .breadcrumb-link{color:var(--ink-dim);text-decoration:none;font-size:0.9rem;}
+  .breadcrumb-link:hover{color:var(--brass-bright);}
+  .share-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--ink-dim);
+    padding:8px 14px;
+    font-size:0.85rem;
+    cursor:pointer;
+    transition:border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  }
+  .share-btn:hover{border-color:var(--brass);color:var(--brass-bright);}
+  .share-btn:active{transform:scale(0.96);}
+  .share-icon{width:16px;height:16px;flex:none;}
+  .view-log-link{
+    display:inline-block;
+    color:var(--brass-bright);
+    text-decoration:none;
+    border-bottom:1px solid rgba(224,181,99,0.4);
+  }
+  .view-log-link:hover{color:var(--brass);border-color:var(--brass);}
 
   .dossier-head{padding:20px 0 40px;border-bottom:1px solid var(--border);}
   .dossier-head .stamp{
@@ -298,7 +343,6 @@
     width:100%;justify-content:center;
     margin-bottom:24px;
   }
-  .copy-btn[data-copied="true"]{background:var(--steel);color:#0c0b09;}
 
   .steps{display:grid;gap:12px;counter-reset:step;}
   .steps li{
@@ -461,6 +505,7 @@
     <div class="nav-links-desktop">
       <a href="index.html#home">Home</a>
       <a href="index.html#archive" class="is-active">Archive</a>
+      <a href="executors.html">Executors</a>
       <a href="index.html#briefing">FAQ</a>
     </div>
     <div class="nav-actions">
@@ -473,6 +518,7 @@
     <div class="menu-panel" id="menu-panel">
       <a href="index.html" class="menu-link">Home</a>
       <a href="index.html#archive" class="menu-link is-active">Archive</a>
+      <a href="executors.html" class="menu-link">Executors</a>
       <a href="index.html#briefing" class="menu-link">FAQ</a>
     </div>
   </nav>
@@ -480,7 +526,13 @@
 <div class="menu-backdrop" id="menu-backdrop"></div>
 
 <div class="wrap">
-  <p class="breadcrumb"><a href="index.html#archive">← Back to archive</a></p>
+  <p class="breadcrumb-row">
+    <a href="index.html#archive" class="breadcrumb-link">← Back to archive</a>
+    <button class="share-btn" id="share-btn" type="button">
+      <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.3 10.7l7.4-4.4M8.3 13.3l7.4 4.4"/></svg>
+      Copy link
+    </button>
+  </p>
 
   <div class="dossier-head">
     <span class="stamp">ACTIVE</span>
@@ -528,7 +580,7 @@
       </ul>
 
       <div class="req-box">
-        <strong>Requirements:</strong> any Roblox executor that supports HTTP requests via <code>loadstring</code>.
+        <strong>Requirements:</strong> any Roblox executor that supports HTTP requests via <code>loadstring</code>. <a href="executors.html" class="view-log-link">See supported executors</a>
       </div>
     </div>
 
@@ -620,22 +672,42 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
 </button>
 
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  function showToast(message){
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('is-visible'));
+    setTimeout(() => {
+      toast.classList.remove('is-visible');
+      setTimeout(() => toast.remove(), 300);
+    }, 2400);
+  }
 
   const copyBtn = document.getElementById('copy-btn');
   const codeEl = document.getElementById('script-code');
   copyBtn.addEventListener('click', async () => {
     try{
       await navigator.clipboard.writeText(codeEl.textContent);
-      copyBtn.textContent = 'Copied';
-      copyBtn.setAttribute('data-copied', 'true');
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy script';
-        copyBtn.removeAttribute('data-copied');
-      }, 1800);
+      showToast('Script copied to clipboard');
     }catch(e){
-      copyBtn.textContent = 'Press Ctrl+C to copy';
+      showToast('Copy failed — press Ctrl+C to copy manually');
+    }
+  });
+
+  const shareBtn = document.getElementById('share-btn');
+  shareBtn.addEventListener('click', async () => {
+    try{
+      await navigator.clipboard.writeText(window.location.href);
+      showToast('Link copied to clipboard');
+    }catch(e){
+      showToast('Copy the URL from your address bar');
     }
   });
 

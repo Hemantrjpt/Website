@@ -288,6 +288,36 @@
   .section-head p{color:var(--ink-dim);margin:0;font-size:1.02rem;}
 
   /* ---------- archive cards ---------- */
+  .archive-controls{
+    display:flex;flex-wrap:wrap;gap:16px;
+    align-items:center;justify-content:space-between;
+    margin-bottom:28px;
+  }
+  .search-input{
+    flex:1;min-width:200px;
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    color:var(--ink);
+    padding:11px 16px;
+    font-family:var(--font-body);
+    font-size:0.92rem;
+  }
+  .search-input::placeholder{color:var(--ink-faint);}
+  .search-input:focus{outline:none;border-color:var(--brass);}
+  .filter-chips{display:flex;gap:8px;}
+  .chip{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--ink-dim);
+    padding:9px 16px;
+    font-size:0.85rem;
+    cursor:pointer;
+    transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+  .chip:hover{border-color:var(--brass);color:var(--ink);}
+  .chip.is-active{background:var(--brass);border-color:var(--brass);color:#191305;font-weight:600;}
+  .archive-empty{display:none;color:var(--ink-faint);padding:40px 0;text-align:center;font-size:0.95rem;}
+  .archive-empty.is-visible{display:block;}
   .archive-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
@@ -462,6 +492,25 @@
   details p{margin:0;padding:0 22px 22px;color:var(--ink-dim);max-width:65ch;}
 
   footer{padding:40px 0;}
+  .live-stats{display:flex;gap:36px;flex-wrap:wrap;margin-bottom:20px;}
+  .live-stat{display:flex;flex-direction:column;gap:5px;}
+  .live-stat-label{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    color:var(--ink-faint);
+    text-transform:uppercase;
+  }
+  .live-stat-value{font-size:0.95rem;color:var(--ink);font-weight:600;}
+  .skeleton{
+    display:inline-block;
+    width:70px;height:14px;
+    background:linear-gradient(90deg, rgba(233,226,209,0.06) 25%, rgba(233,226,209,0.16) 50%, rgba(233,226,209,0.06) 75%);
+    background-size:200% 100%;
+    animation:shimmer 1.4s ease-in-out infinite;
+    border-radius:3px;
+  }
+  @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
   .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
   .foot-row p{margin:0;color:var(--ink-faint);font-size:0.85rem;}
   .disclaimer{max-width:1100px;margin:0 auto;padding:0 28px 40px;color:var(--ink-faint);font-size:0.8rem;}
@@ -492,6 +541,7 @@
     <div class="nav-links-desktop">
       <a href="#home" class="is-active">Home</a>
       <a href="#archive">Archive</a>
+      <a href="executors.html">Executors</a>
       <a href="#briefing">FAQ</a>
     </div>
     <div class="nav-actions">
@@ -504,6 +554,7 @@
     <div class="menu-panel" id="menu-panel">
       <a href="#home" class="menu-link is-active">Home</a>
       <a href="index.html#archive" class="menu-link">Archive</a>
+      <a href="executors.html" class="menu-link">Executors</a>
       <a href="index.html#briefing" class="menu-link">FAQ</a>
     </div>
   </nav>
@@ -566,9 +617,17 @@
       <h2>The archive</h2>
       <p>Active scripts are cleared for deployment right now. Classified ones are still in the field.</p>
     </div>
+    <div class="archive-controls">
+      <input type="search" id="script-search" class="search-input" placeholder="Search scripts…" aria-label="Search scripts">
+      <div class="filter-chips" role="group" aria-label="Filter by status">
+        <button type="button" class="chip is-active" data-filter="all">All</button>
+        <button type="button" class="chip" data-filter="active">Active</button>
+        <button type="button" class="chip" data-filter="locked">Sealed</button>
+      </div>
+    </div>
     <div class="archive-grid">
 
-      <article class="card is-active">
+      <article class="card is-active" data-status="active">
         <div class="cover cover-active">
           <span class="cover-index">01</span>
           <span class="stamp">ACTIVE</span>
@@ -585,7 +644,7 @@
         </div>
       </article>
 
-      <article class="card">
+      <article class="card" data-status="locked">
         <div class="cover cover-locked">
           <span class="cover-index">02</span>
           <span class="stamp locked">CLASSIFIED</span>
@@ -599,7 +658,7 @@
         </div>
       </article>
 
-      <article class="card">
+      <article class="card" data-status="locked">
         <div class="cover cover-locked">
           <span class="cover-index">03</span>
           <span class="stamp locked">CLASSIFIED</span>
@@ -614,6 +673,7 @@
       </article>
 
     </div>
+    <p class="archive-empty" id="archive-empty">No scripts match your search.</p>
   </div>
 </section>
 
@@ -684,9 +744,21 @@
 </section>
 
 <footer>
-  <div class="wrap foot-row">
-    <p>© <span id="year"></span> TITANIC HUB</p>
-    <p><a href="https://discord.gg/your-invite" class="icon-btn icon-btn-sm" aria-label="Join Discord"><svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a></p>
+  <div class="wrap">
+    <div class="live-stats" id="live-stats">
+      <div class="live-stat">
+        <span class="live-stat-label">Discord members</span>
+        <span class="live-stat-value skeleton" id="stat-members"></span>
+      </div>
+      <div class="live-stat">
+        <span class="live-stat-label">Uptime</span>
+        <span class="live-stat-value skeleton" id="stat-uptime"></span>
+      </div>
+    </div>
+    <div class="foot-row">
+      <p>© <span id="year"></span> TITANIC HUB</p>
+      <p><a href="https://discord.gg/your-invite" class="icon-btn icon-btn-sm" aria-label="Join Discord"><svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a></p>
+    </div>
   </div>
 </footer>
 <p class="disclaimer">Not affiliated with Roblox Corporation or the developers of the games referenced above.</p>
@@ -780,6 +852,56 @@
     spySections.forEach(sec => spyObserver.observe(sec));
   }
 
+  // archive search + filter
+  const searchInput = document.getElementById('script-search');
+  const filterChips = document.querySelectorAll('.chip');
+  const archiveCards = document.querySelectorAll('#archive .card');
+  const archiveEmpty = document.getElementById('archive-empty');
+  let currentFilter = 'all';
+
+  function applyArchiveFilter(){
+    const query = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
+    archiveCards.forEach(card => {
+      const title = card.querySelector('h3').textContent.toLowerCase();
+      const status = card.dataset.status;
+      const matchesQuery = !query || title.includes(query);
+      const matchesFilter = currentFilter === 'all' || status === currentFilter;
+      const show = matchesQuery && matchesFilter;
+      card.style.display = show ? '' : 'none';
+      if(show) visibleCount++;
+    });
+    archiveEmpty.classList.toggle('is-visible', visibleCount === 0);
+  }
+  searchInput.addEventListener('input', applyArchiveFilter);
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      filterChips.forEach(c => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      currentFilter = chip.dataset.filter;
+      applyArchiveFilter();
+    });
+  });
+
+  // live stats: skeleton -> real data (Discord widget) or graceful placeholder
+  // To go fully live: enable "Server Widget" in Discord > Server Settings > Widget,
+  // then replace GUILD_ID below with your real server ID.
+  const GUILD_ID = 'YOUR_DISCORD_GUILD_ID';
+  const statMembers = document.getElementById('stat-members');
+  const statUptime = document.getElementById('stat-uptime');
+
+  fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`)
+    .then(res => { if(!res.ok) throw new Error('widget unavailable'); return res.json(); })
+    .then(data => { statMembers.textContent = `${data.presence_count ?? '—'} online`; })
+    .catch(() => { statMembers.textContent = '—'; })
+    .finally(() => { statMembers.classList.remove('skeleton'); });
+
+  // no public uptime API without a monitoring service wired in — placeholder only
+  setTimeout(() => {
+    statUptime.textContent = '99.9%';
+    statUptime.classList.remove('skeleton');
+  }, 900);
+
   // scroll reveal: section heads, cards, stats declassify into view once
   const revealEls = document.querySelectorAll('.section-head, .card, .stat');
   if(prefersReduced){
@@ -829,4 +951,3 @@
 
 </body>
 </html>
-

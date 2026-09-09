@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TITANIC HUB — Roblox Script Archive</title>
+<meta name="description" content="Field-tested Roblox automation scripts. Browse the archive, get a script, deploy it.">
+<meta property="og:title" content="TITANIC HUB — Roblox Script Archive">
+<meta property="og:description" content="Field-tested Roblox automation scripts. Browse the archive, get a script, deploy it.">
+<meta property="og:image" content="assets/logo.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#0c0b09;
+    --bg-panel:#17140f;
+    --bg-panel-raised:#1f1a13;
+    --ink:#e9e2d1;
+    --ink-dim:#a89e8c;
+    --ink-faint:#6b6455;
+    --brass:#c8973f;
+    --brass-bright:#e0b563;
+    --steel:#5b7c8d;
+    --rust:#9c4230;
+    --border:rgba(233,226,209,0.12);
+    --font-display:'Staatliches', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg-void);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* faint grain + vignette on the whole page */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    background-image:
+      radial-gradient(ellipse at 20% -10%, rgba(200,151,63,0.05), transparent 55%),
+      radial-gradient(ellipse at 100% 110%, rgba(91,124,141,0.06), transparent 55%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/></svg>");
+  }
+
+  a{color:inherit;}
+  ul{margin:0;padding:0;list-style:none;}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+  ::selection{background:var(--brass);color:#0c0b09;}
+  :focus-visible{outline:2px solid var(--brass-bright);outline-offset:3px;}
+
+  #home, #archive, #briefing{scroll-margin-top:88px;}
+
+  .scroll-progress{
+    position:fixed;top:0;left:0;
+    height:3px;width:100%;
+    background:var(--brass-bright);
+    transform:scaleX(0);
+    transform-origin:left;
+    z-index:30;
+    transition:transform 0.1s linear;
+  }
+
+  .back-to-top{
+    position:fixed;right:24px;bottom:24px;
+    width:46px;height:46px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--brass);color:#191305;
+    border:none;cursor:pointer;
+    clip-path:polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    opacity:0;transform:translateY(8px);pointer-events:none;
+    transition:opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+    z-index:25;
+  }
+  .back-to-top.is-visible{opacity:1;transform:none;pointer-events:auto;}
+  .back-to-top:hover{background:var(--brass-bright);}
+  .back-to-top:active{transform:scale(0.92);}
+  .back-to-top svg{width:20px;height:20px;}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky;top:0;z-index:20;
+    background:rgba(12,11,9,0.86);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1100px;margin:0 auto;position:relative;}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .brand-mark-img{width:36px;height:36px;flex:none;border-radius:8px;object-fit:cover;}
+  .nav-actions{display:flex;align-items:center;gap:10px;}
+  .nav-links-desktop{display:none;align-items:center;gap:32px;}
+  .nav-links-desktop a{
+    font-size:0.95rem;
+    color:var(--ink-dim);
+    text-decoration:none;
+    transition:color 0.2s ease;
+  }
+  .nav-links-desktop a:hover{color:var(--ink);}
+  .nav-links-desktop a.is-active{color:var(--brass-bright);}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 20px;
+    background:var(--brass);
+    color:#191305;
+    font-weight:600;
+    font-size:0.92rem;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    clip-path:polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition:background 0.2s ease, transform 0.15s ease;
+  }
+  .btn:hover{background:var(--brass-bright);transform:translateY(-1px);}
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--border);
+    clip-path:none;
+  }
+  .btn-ghost:hover{border-color:var(--brass);color:var(--brass-bright);background:transparent;}
+  .discord-icon{width:16px;height:16px;flex:none;fill:#5865F2;}
+  .discord-link{display:inline-flex;align-items:center;gap:6px;}
+  .icon-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:38px;height:38px;flex:none;
+    background:#1a1a1e;
+    border:1px solid var(--border);
+    border-radius:9px;
+    color:var(--ink-dim);
+    cursor:pointer;
+    padding:0;
+    transition:background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, color 0.2s ease;
+  }
+  .icon-btn:hover{background:#232328;border-color:var(--brass);color:var(--brass-bright);}
+  .icon-btn:active{transform:scale(0.9);}
+  .icon-btn .discord-icon{width:20px;height:20px;}
+  .icon-btn-sm{width:32px;height:32px;}
+  .icon-btn-sm .discord-icon{width:17px;height:17px;}
+  .btn:active, .btn-ghost:active{transform:scale(0.96);}
+  .menu-toggle svg{width:19px;height:19px;}
+  .menu-toggle .menu-icon-close{display:none;}
+  .menu-toggle[aria-expanded="true"] .menu-icon-bars{display:none;}
+  .menu-toggle[aria-expanded="true"] .menu-icon-close{display:block;}
+
+  /* ---------- dropdown menu panel ---------- */
+  .menu-backdrop{
+    position:fixed;inset:0;
+    background:rgba(6,5,4,0.55);
+    opacity:0;pointer-events:none;
+    transition:opacity 0.2s ease;
+    z-index:15;
+  }
+  .menu-backdrop.is-open{opacity:1;pointer-events:auto;}
+  .menu-panel{
+    position:absolute;
+    top:calc(100% + 14px);
+    right:28px;
+    width:min(300px, calc(100vw - 56px));
+    background:rgba(15,13,10,0.97);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:18px 8px;
+    display:flex;flex-direction:column;gap:2px;
+    transform-origin:top right;
+    opacity:0;
+    transform:translateY(-8px) scale(0.98);
+    pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.2s ease;
+    z-index:21;
+  }
+  .menu-panel.is-open{opacity:1;transform:none;pointer-events:auto;}
+  .menu-link{
+    display:block;
+    padding:14px 22px;
+    font-family:var(--font-display);
+    font-size:1.3rem;
+    letter-spacing:0.02em;
+    color:var(--ink-dim);
+    text-decoration:none;
+    border-radius:12px;
+    transition:color 0.15s ease, background 0.15s ease;
+  }
+  .menu-link:hover{color:var(--ink);background:rgba(233,226,209,0.04);}
+  .menu-link.is-active{color:var(--brass-bright);}
+  .menu-link.is-active::after{content:"";display:block;height:3px;width:56px;background:var(--brass-bright);border-radius:2px;margin-top:10px;}
+
+  /* ---------- motion: hero unmask + terminal scan ---------- */
+  @keyframes unmask{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
+  .hero h1{animation:unmask 0.9s cubic-bezier(.65,0,.35,1) 0.1s both;}
+  @keyframes scan{0%{top:-45%;}100%{top:100%;}}
+
+  /* ---------- motion: scroll reveal ---------- */
+  .section-head, .stat{
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .section-head.is-visible, .stat.is-visible{opacity:1;transform:none;}
+  .report-stats .stat:nth-child(2){transition-delay:0.08s;}
+  .report-stats .stat:nth-child(3){transition-delay:0.16s;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:96px 0 72px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--border);
+  }
+  .hero-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:center;}
+  .hero h1{
+    font-family:var(--font-display);
+    font-size:clamp(3.2rem, 7vw, 5.4rem);
+    letter-spacing:0.03em;
+    line-height:0.95;
+    margin:0 0 20px;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .hero h1 span{color:var(--brass);}
+  .hero p.lede{
+    font-size:1.15rem;
+    color:var(--ink-dim);
+    max-width:46ch;
+    margin:0 0 28px;
+  }
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+
+  .terminal{
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    padding:20px 22px;
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    color:var(--steel);
+    min-height:150px;
+    position:relative;
+    overflow:hidden;
+    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+  }
+  .terminal::before{
+    content:"";
+    position:absolute;
+    left:0;right:0;height:45%;top:-45%;
+    background:linear-gradient(to bottom, transparent, rgba(224,181,99,0.08), transparent);
+    animation:scan 6s linear infinite;
+    pointer-events:none;
+  }
+  .terminal .line{margin:0 0 8px;color:var(--ink-dim);}
+  .terminal .line.ok{color:var(--brass-bright);}
+  .terminal .cursor{display:inline-block;width:7px;height:14px;background:var(--brass-bright);vertical-align:-2px;animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- sections ---------- */
+  section{padding:80px 0;border-bottom:1px solid var(--border);}
+  .section-head{max-width:60ch;margin:0 0 40px;}
+  .section-head h2{
+    font-family:var(--font-display);
+    font-size:2.2rem;
+    letter-spacing:0.02em;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  .section-head h2::before{
+    content:"";
+    display:inline-block;
+    width:22px;height:3px;
+    background:var(--brass);
+    margin-right:12px;
+    vertical-align:middle;
+  }
+  .section-head p{color:var(--ink-dim);margin:0;font-size:1.02rem;}
+
+  /* ---------- archive cards ---------- */
+  .archive-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:22px;
+  }
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    padding:26px 24px 24px;
+    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    position:relative;
+    overflow:hidden;
+    transition:border-color 0.2s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(0,0,0,0.4);}
+  .card.is-active:hover{box-shadow:0 16px 34px rgba(200,151,63,0.16);}
+  .card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:var(--bg-void);
+    transform-origin:right;
+    transform:scaleX(1);
+    transition:transform 0.7s cubic-bezier(.65,0,.35,1);
+    pointer-events:none;
+    z-index:2;
+  }
+  .card.is-visible::after{transform:scaleX(0);}
+  .archive-grid .card:nth-child(2)::after{transition-delay:0.1s;}
+  .archive-grid .card:nth-child(3)::after{transition-delay:0.2s;}
+  .card.is-active{border-color:rgba(200,151,63,0.35);}
+  .card:hover.is-active{border-color:var(--brass);}
+  .cover{
+    position:relative;
+    margin:-26px -24px 4px;
+    height:130px;
+    overflow:hidden;
+    border-bottom:1px solid var(--border);
+  }
+  .cover-index{
+    position:absolute;top:10px;left:12px;
+    font-family:var(--font-display);
+    font-size:1.7rem;
+    letter-spacing:0.02em;
+    color:rgba(233,226,209,0.5);
+    z-index:1;
+  }
+  .cover .stamp{position:absolute;top:10px;right:12px;margin:0;z-index:1;}
+  .cover-active{
+    background:
+      radial-gradient(120% 140% at 32% 105%, rgba(200,151,63,0.28), transparent 60%),
+      linear-gradient(160deg, #2b0f0a 0%, #55190f 55%, #1a130c 100%);
+  }
+  .cover-active .cover-art{position:absolute;right:-8px;bottom:-16px;width:118px;height:auto;}
+  .cover-locked{
+    background:
+      repeating-linear-gradient(135deg, rgba(233,226,209,0.045) 0 8px, transparent 8px 18px),
+      linear-gradient(160deg, #17140f, #1f1a13);
+  }
+  .cover-seal{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.16em;
+    color:rgba(168,158,140,0.4);
+    transform:rotate(-8deg);
+  }
+  .stamp{
+    align-self:flex-start;
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    padding:3px 10px;
+    border:1.5px solid var(--brass);
+    color:var(--brass-bright);
+    transform:rotate(-3deg);
+  }
+  .stamp.locked{border-color:var(--ink-faint);color:var(--ink-faint);}
+  .card h3{font-family:var(--font-display);font-size:1.6rem;letter-spacing:0.02em;margin:0;color:var(--ink);}
+  .card .game-tag{font-size:0.85rem;color:var(--steel);margin:-8px 0 0;}
+  .card p.desc{color:var(--ink-dim);font-size:0.95rem;margin:0;flex:1;}
+  .card-foot{margin-top:6px;}
+  .btn-block{width:100%;justify-content:center;}
+  .btn-locked{
+    width:100%;justify-content:center;
+    background:transparent;border:1px solid var(--border);color:var(--ink-faint);
+    clip-path:none;cursor:not-allowed;
+  }
+
+  /* ---------- why-us pillars ---------- */
+  .pillar-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    gap:22px;
+  }
+  .pillar-card{
+    border:1px solid var(--border);
+    border-top:2px solid var(--brass);
+    padding:26px 24px;
+    background:var(--bg-panel);
+  }
+  .pillar-card .pillar-icon{
+    width:44px;height:44px;
+    background:var(--bg-panel-raised);
+    border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;
+  }
+  .pillar-card .pillar-icon svg{width:21px;height:21px;stroke:var(--brass-bright);}
+  .pillar-card h3{font-family:var(--font-display);font-size:1.25rem;margin:0 0 8px;letter-spacing:0.01em;}
+  .pillar-card p{color:var(--ink-dim);margin:0;font-size:0.95rem;}
+
+  /* ---------- recent updates timeline ---------- */
+  .timeline{position:relative;margin-top:8px;padding-left:28px;}
+  .timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--border);}
+  .timeline-item{position:relative;padding-bottom:28px;}
+  .timeline-item:last-child{padding-bottom:0;}
+  .timeline-item::before{
+    content:"";
+    position:absolute;left:-28px;top:4px;
+    width:12px;height:12px;
+    border-radius:50%;
+    border:2px solid var(--steel);
+    background:var(--bg-void);
+  }
+  .timeline-item.is-latest::before{
+    border-color:var(--brass-bright);
+    box-shadow:0 0 0 4px rgba(224,181,99,0.15);
+  }
+  .timeline-item .v-num{font-family:var(--font-mono);color:var(--brass-bright);font-weight:600;font-size:1.02rem;}
+  .timeline-item .v-time{color:var(--ink-faint);font-size:0.85rem;margin:2px 0 8px;}
+  .timeline-item p{color:var(--ink-dim);margin:0;font-size:0.95rem;max-width:60ch;}
+  .view-log-link{
+    display:inline-block;
+    color:var(--brass-bright);
+    text-decoration:none;
+    font-size:0.92rem;
+    margin-top:20px;
+    border-bottom:1px solid rgba(224,181,99,0.4);
+  }
+  .view-log-link:hover{color:var(--brass);border-color:var(--brass);}
+
+  /* ---------- field report ---------- */
+  .report{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:start;}
+  .report p{color:var(--ink-dim);font-size:1.02rem;}
+  .report-stats{display:grid;gap:18px;}
+  .stat{border-left:2px solid var(--brass);padding-left:16px;}
+  .stat .num{font-family:var(--font-display);font-size:2.1rem;color:var(--ink);display:block;}
+  .stat .label{color:var(--ink-dim);font-size:0.88rem;}
+
+  /* ---------- faq ---------- */
+  .faq-list{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
+  details{background:var(--bg-panel);padding:0;}
+  summary{
+    list-style:none;cursor:pointer;
+    padding:20px 22px;
+    font-weight:600;
+    display:flex;justify-content:space-between;align-items:center;
+    gap:16px;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary::after{
+    content:"+";
+    font-family:var(--font-mono);
+    color:var(--brass);
+    font-size:1.2rem;
+    flex:none;
+  }
+  details[open] summary::after{content:"–";}
+  details p{margin:0;padding:0 22px 22px;color:var(--ink-dim);max-width:65ch;}
+
+  footer{padding:40px 0;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .foot-row p{margin:0;color:var(--ink-faint);font-size:0.85rem;}
+  .disclaimer{max-width:1100px;margin:0 auto;padding:0 28px 40px;color:var(--ink-faint);font-size:0.8rem;}
+
+  @media (max-width: 860px){
+    .hero-grid, .report{grid-template-columns:1fr;}
+  }
+
+  @media (min-width: 861px){
+    .nav-links-desktop{display:flex;}
+    .menu-toggle, .menu-panel, .menu-backdrop{display:none !important;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important; scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<header>
+  <nav class="nav">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.png" alt="TITANIC HUB" class="brand-mark-img">
+    </a>
+    <div class="nav-links-desktop">
+      <a href="#home" class="is-active">Home</a>
+      <a href="#archive">Archive</a>
+      <a href="#briefing">FAQ</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://discord.gg/your-invite" class="icon-btn" aria-label="Join Discord"><svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
+      <button class="icon-btn menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-panel" aria-label="Open menu">
+        <svg class="menu-icon-bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+        <svg class="menu-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+      </button>
+    </div>
+    <div class="menu-panel" id="menu-panel">
+      <a href="#home" class="menu-link is-active">Home</a>
+      <a href="index.html#archive" class="menu-link">Archive</a>
+      <a href="index.html#briefing" class="menu-link">FAQ</a>
+    </div>
+  </nav>
+</header>
+<div class="menu-backdrop" id="menu-backdrop"></div>
+
+<section class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Recon-grade<br>automation<br>for <span>Roblox</span></h1>
+      <p class="lede">Every script in this archive has logged real matches before release — automation built to survive patches, not just demos.</p>
+      <div class="hero-ctas">
+        <a href="#archive" class="btn">Browse the archive</a>
+        <a href="https://discord.gg/your-invite" class="icon-btn" aria-label="Join Discord"><svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
+      </div>
+    </div>
+    <div class="terminal" id="terminal" aria-hidden="true">
+      <p class="line" id="t1"></p>
+      <p class="line" id="t2"></p>
+      <p class="line ok" id="t3"></p>
+    </div>
+  </div>
+</section>
+
+<section id="why-us">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Why Titanic Hub</h2>
+      <p>A few reasons operators keep coming back to the archive.</p>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/><path d="M9.5 12l1.8 1.8L15 10.2"/></svg>
+        </div>
+        <h3>Actively maintained</h3>
+        <p>Patches ship within days of a game update, not weeks — nothing sits broken for long.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M17 20v-2a4 4 0 00-3-3.87M7 20v-2a4 4 0 013-3.87M12 12a4 4 0 100-8 4 4 0 000 8z"/></svg>
+        </div>
+        <h3>Community-driven</h3>
+        <p>Feature requests and new scripts come straight from the Discord, not a boardroom.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <h3>Free, always</h3>
+        <p>No paywalls, no premium tiers. Every script in the archive is free to use.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="archive">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>The archive</h2>
+      <p>Active scripts are cleared for deployment right now. Classified ones are still in the field.</p>
+    </div>
+    <div class="archive-grid">
+
+      <article class="card is-active">
+        <div class="cover cover-active">
+          <span class="cover-index">01</span>
+          <span class="stamp">ACTIVE</span>
+          <svg class="cover-art" viewBox="0 0 120 160" fill="none" aria-hidden="true">
+            <path d="M60 8c-14 0-24 12-24 26 0 10 5 18 5 18l-14 10c-6 4-9 11-9 18v70c0 6 5 10 10 10h64c5 0 10-4 10-10V80c0-7-3-14-9-18l-14-10s5-8 5-18c0-14-10-26-24-26z" fill="#170d09" fill-opacity="0.85"/>
+            <circle cx="48" cy="46" r="4" fill="#e0b563"/>
+            <circle cx="72" cy="46" r="4" fill="#e0b563"/>
+          </svg>
+        </div>
+        <h3>Attack on Titan: Revolution</h3>
+        <p class="desc">Auto-farm, combat automation, wave clearing, and prestige routines in one hub.</p>
+        <div class="card-foot">
+          <a href="attack-on-titan-revolution.html" class="btn btn-block">Get script</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="cover cover-locked">
+          <span class="cover-index">02</span>
+          <span class="stamp locked">CLASSIFIED</span>
+          <span class="cover-seal">FILE SEALED</span>
+        </div>
+        <h3>Script #002</h3>
+        <p class="game-tag">Sealed</p>
+        <p class="desc">Details sealed until deployment. Check the Discord for progress updates.</p>
+        <div class="card-foot">
+          <button class="btn-locked" disabled>Locked</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="cover cover-locked">
+          <span class="cover-index">03</span>
+          <span class="stamp locked">CLASSIFIED</span>
+          <span class="cover-seal">FILE SEALED</span>
+        </div>
+        <h3>Script #003</h3>
+        <p class="game-tag">Sealed</p>
+        <p class="desc">Details sealed until deployment. Check the Discord for progress updates.</p>
+        <div class="card-foot">
+          <button class="btn-locked" disabled>Locked</button>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="updates">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Recent updates</h2>
+      <p>What shipped lately, straight from the changelog.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item is-latest">
+        <div class="v-num">v1.4.2</div>
+        <div class="v-time">Today</div>
+        <p>Smoothed out combat automation's target priority during wave events, and tidied up a few spacing issues in the Obsidian UI.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="v-num">v1.4.1</div>
+        <div class="v-time">3 days ago</div>
+        <p>Added webhook alerts for prestige milestones and tuned auto-farm pathing around the forest quest zone.</p>
+      </div>
+    </div>
+    <a href="attack-on-titan-revolution.html#update-log" class="view-log-link">View full changelog</a>
+  </div>
+</section>
+
+<section>
+  <div class="wrap report">
+    <div>
+      <div class="section-head">
+        <h2>Field report</h2>
+      </div>
+      <p>TITANIC HUB is built and maintained independently. Nothing here ships until it's been run through real sessions — farming loops, combat routines, and menus get rebuilt whenever a game update breaks them, instead of being left to rot.</p>
+      <p>Requests, bug reports, and patch notes all move through the Discord — it's the fastest way to know when a script updates.</p>
+    </div>
+    <div class="report-stats">
+      <div class="stat"><span class="num">01</span><span class="label">Active script</span></div>
+      <div class="stat"><span class="num">2+</span><span class="label">In development</span></div>
+      <div class="stat"><span class="num">Free</span><span class="label">Every script in the archive</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="briefing">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Briefing</h2>
+      <p>Common questions before deployment.</p>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>Are these scripts free?</summary>
+        <p>Yes — every script in the archive is free to use. Joining the Discord helps support ongoing development, but it's never required.</p>
+      </details>
+      <details>
+        <summary>Will using a script get my account banned?</summary>
+        <p>Any third-party script carries some risk. Use your own judgment, and consider testing on an account you're not attached to before running anything on a main.</p>
+      </details>
+      <details>
+        <summary>How do I install a script?</summary>
+        <p>Open a script's page, copy it, paste it into your executor, and run it. Each script page has the exact steps.</p>
+      </details>
+      <details>
+        <summary>Can I request a script for a specific game?</summary>
+        <p>Drop a request in the Discord. New scripts get prioritized based on community interest.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <p>© <span id="year"></span> TITANIC HUB</p>
+    <p><a href="https://discord.gg/your-invite" class="icon-btn icon-btn-sm" aria-label="Join Discord"><svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a></p>
+  </div>
+</footer>
+<p class="disclaimer">Not affiliated with Roblox Corporation or the developers of the games referenced above.</p>
+
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+</button>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // one-time terminal reveal, respects reduced-motion
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lines = [
+    { el: document.getElementById('t1'), text: '> establishing uplink...' },
+    { el: document.getElementById('t2'), text: '> scanning archive...' },
+    { el: document.getElementById('t3'), text: '> 1 script active — attack on titan: revolution' }
+  ];
+
+  function typeLine(index){
+    if(index >= lines.length) return;
+    const { el, text } = lines[index];
+    if(prefersReduced){
+      el.textContent = text;
+      typeLine(index + 1);
+      return;
+    }
+    let i = 0;
+    const interval = setInterval(() => {
+      el.textContent = text.slice(0, i + 1);
+      i++;
+      if(i >= text.length){
+        clearInterval(interval);
+        setTimeout(() => typeLine(index + 1), 220);
+      }
+    }, 18);
+  }
+  typeLine(0);
+
+  // header dropdown menu
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuPanel = document.getElementById('menu-panel');
+  const menuBackdrop = document.getElementById('menu-backdrop');
+
+  function openMenu(){
+    menuPanel.classList.add('is-open');
+    menuBackdrop.classList.add('is-open');
+    menuToggle.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu(){
+    menuPanel.classList.remove('is-open');
+    menuBackdrop.classList.remove('is-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  }
+  menuToggle.addEventListener('click', () => {
+    menuPanel.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+  menuBackdrop.addEventListener('click', closeMenu);
+  document.querySelectorAll('.menu-link').forEach(link => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
+
+  // scroll progress bar
+  const scrollProgress = document.getElementById('scroll-progress');
+  const backToTop = document.getElementById('back-to-top');
+  function onScroll(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+    scrollProgress.style.transform = `scaleX(${progress})`;
+    backToTop.classList.toggle('is-visible', scrollTop > 500);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+  });
+
+  // scrollspy for desktop inline nav
+  const spySections = ['home', 'archive', 'briefing'].map(id => document.getElementById(id)).filter(Boolean);
+  const spyLinks = document.querySelectorAll('.nav-links-desktop a');
+  if(spySections.length && spyLinks.length){
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          spyLinks.forEach(link => {
+            link.classList.toggle('is-active', link.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    spySections.forEach(sec => spyObserver.observe(sec));
+  }
+
+  // scroll reveal: section heads, cards, stats declassify into view once
+  const revealEls = document.querySelectorAll('.section-head, .card, .stat');
+  if(prefersReduced){
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    revealEls.forEach(el => io.observe(el));
+  }
+
+  // smooth-animated FAQ accordion
+  document.querySelectorAll('.faq-list details').forEach(det => {
+    const summary = det.querySelector('summary');
+    const panel = det.querySelector('p');
+    panel.style.overflow = 'hidden';
+    panel.style.maxHeight = '0px';
+    panel.style.paddingTop = '0px';
+    panel.style.paddingBottom = '0px';
+    if(!prefersReduced){
+      panel.style.transition = 'max-height 0.35s ease, padding 0.35s ease';
+    }
+    summary.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = det.hasAttribute('open');
+      if(isOpen){
+        panel.style.maxHeight = '0px';
+        panel.style.paddingTop = '0px';
+        panel.style.paddingBottom = '0px';
+        setTimeout(() => det.removeAttribute('open'), prefersReduced ? 0 : 350);
+      } else {
+        det.setAttribute('open', '');
+        requestAnimationFrame(() => {
+          panel.style.maxHeight = panel.scrollHeight + 'px';
+          panel.style.paddingTop = '';
+          panel.style.paddingBottom = '';
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
+

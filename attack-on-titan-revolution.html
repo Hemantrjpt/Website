@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attack on Titan: Revolution — TITANIC HUB</title>
+<meta name="description" content="Full automation suite for Attack on Titan: Revolution. Copy the script, paste it in your executor, deploy.">
+<meta property="og:title" content="Attack on Titan: Revolution — TITANIC HUB">
+<meta property="og:description" content="Full automation suite for Attack on Titan: Revolution. Copy the script, paste it in your executor, deploy.">
+<meta property="og:image" content="assets/logo.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#0c0b09;
+    --bg-panel:#17140f;
+    --bg-panel-raised:#1f1a13;
+    --ink:#e9e2d1;
+    --ink-dim:#a89e8c;
+    --ink-faint:#6b6455;
+    --brass:#c8973f;
+    --brass-bright:#e0b563;
+    --steel:#5b7c8d;
+    --rust:#9c4230;
+    --border:rgba(233,226,209,0.12);
+    --font-display:'Staatliches', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg-void);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(ellipse at 20% -10%, rgba(200,151,63,0.05), transparent 55%),
+      radial-gradient(ellipse at 100% 110%, rgba(91,124,141,0.06), transparent 55%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/></svg>");
+  }
+  a{color:inherit;}
+  ul{margin:0;padding:0;list-style:none;}
+  ::selection{background:var(--brass);color:#0c0b09;}
+  :focus-visible{outline:2px solid var(--brass-bright);outline-offset:3px;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+  .scroll-progress{
+    position:fixed;top:0;left:0;
+    height:3px;width:100%;
+    background:var(--brass-bright);
+    transform:scaleX(0);
+    transform-origin:left;
+    z-index:30;
+    transition:transform 0.1s linear;
+  }
+
+  .back-to-top{
+    position:fixed;right:24px;bottom:24px;
+    width:46px;height:46px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--brass);color:#191305;
+    border:none;cursor:pointer;
+    clip-path:polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    opacity:0;transform:translateY(8px);pointer-events:none;
+    transition:opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+    z-index:25;
+  }
+  .back-to-top.is-visible{opacity:1;transform:none;pointer-events:auto;}
+  .back-to-top:hover{background:var(--brass-bright);}
+  .back-to-top:active{transform:scale(0.92);}
+  .back-to-top svg{width:20px;height:20px;}
+
+  header{
+    position:sticky;top:0;z-index:20;
+    background:rgba(12,11,9,0.86);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1100px;margin:0 auto;position:relative;}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .brand-mark-img{width:36px;height:36px;flex:none;border-radius:8px;object-fit:cover;}
+  .nav-actions{display:flex;align-items:center;gap:10px;}
+  .nav-links-desktop{display:none;align-items:center;gap:32px;}
+  .nav-links-desktop a{
+    font-size:0.95rem;
+    color:var(--ink-dim);
+    text-decoration:none;
+    transition:color 0.2s ease;
+  }
+  .nav-links-desktop a:hover{color:var(--ink);}
+  .nav-links-desktop a.is-active{color:var(--brass-bright);}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 20px;
+    background:var(--brass);
+    color:#191305;
+    font-weight:600;
+    font-size:0.92rem;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    clip-path:polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition:background 0.2s ease, transform 0.15s ease;
+  }
+  .btn:hover{background:var(--brass-bright);transform:translateY(-1px);}
+  .discord-icon{width:16px;height:16px;flex:none;fill:#5865F2;}
+  .discord-link{display:inline-flex;align-items:center;gap:6px;}
+  .icon-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:38px;height:38px;flex:none;
+    background:#1a1a1e;
+    border:1px solid var(--border);
+    border-radius:9px;
+    color:var(--ink-dim);
+    cursor:pointer;
+    padding:0;
+    transition:background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, color 0.2s ease;
+  }
+  .icon-btn:hover{background:#232328;border-color:var(--brass);color:var(--brass-bright);}
+  .icon-btn:active{transform:scale(0.9);}
+  .icon-btn .discord-icon{width:20px;height:20px;}
+  .icon-btn-sm{width:32px;height:32px;}
+  .icon-btn-sm .discord-icon{width:17px;height:17px;}
+  .btn:active{transform:scale(0.96);}
+  .menu-toggle svg{width:19px;height:19px;}
+  .menu-toggle .menu-icon-close{display:none;}
+  .menu-toggle[aria-expanded="true"] .menu-icon-bars{display:none;}
+  .menu-toggle[aria-expanded="true"] .menu-icon-close{display:block;}
+
+  /* ---------- dropdown menu panel ---------- */
+  .menu-backdrop{
+    position:fixed;inset:0;
+    background:rgba(6,5,4,0.55);
+    opacity:0;pointer-events:none;
+    transition:opacity 0.2s ease;
+    z-index:15;
+  }
+  .menu-backdrop.is-open{opacity:1;pointer-events:auto;}
+  .menu-panel{
+    position:absolute;
+    top:calc(100% + 14px);
+    right:28px;
+    width:min(300px, calc(100vw - 56px));
+    background:rgba(15,13,10,0.97);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:18px 8px;
+    display:flex;flex-direction:column;gap:2px;
+    transform-origin:top right;
+    opacity:0;
+    transform:translateY(-8px) scale(0.98);
+    pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.2s ease;
+    z-index:21;
+  }
+  .menu-panel.is-open{opacity:1;transform:none;pointer-events:auto;}
+  .menu-link{
+    display:block;
+    padding:14px 22px;
+    font-family:var(--font-display);
+    font-size:1.3rem;
+    letter-spacing:0.02em;
+    color:var(--ink-dim);
+    text-decoration:none;
+    border-radius:12px;
+    transition:color 0.15s ease, background 0.15s ease;
+  }
+  .menu-link:hover{color:var(--ink);background:rgba(233,226,209,0.04);}
+  .menu-link.is-active{color:var(--brass-bright);}
+  .menu-link.is-active::after{content:"";display:block;height:3px;width:56px;background:var(--brass-bright);border-radius:2px;margin-top:10px;}
+
+  @keyframes unmask{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
+  @keyframes riseIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+  @keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.04);}100%{transform:scale(1);}}
+  .copy-btn[data-copied="true"]{animation:pulse 0.35s ease;}
+
+  .breadcrumb{padding:22px 0 0;font-size:0.9rem;}
+  .breadcrumb a{color:var(--ink-dim);text-decoration:none;}
+  .breadcrumb a:hover{color:var(--brass-bright);}
+
+  .dossier-head{padding:20px 0 40px;border-bottom:1px solid var(--border);}
+  .dossier-head .stamp{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.12em;
+    padding:3px 10px;
+    border:1.5px solid var(--brass);
+    color:var(--brass-bright);
+    transform:rotate(-3deg);
+    margin-bottom:16px;
+    opacity:0;
+    animation:riseIn 0.5s ease both;
+  }
+  .dossier-head h1{
+    font-family:var(--font-display);
+    font-size:clamp(2.6rem, 6vw, 4.2rem);
+    letter-spacing:0.02em;
+    margin:0 0 8px;
+    text-transform:uppercase;
+    animation:unmask 0.8s cubic-bezier(.65,0,.35,1) 0.1s both;
+  }
+  .dossier-head .game-tag{color:var(--steel);font-size:1rem;margin:0 0 16px;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;opacity:0;animation:riseIn 0.5s ease 0.2s both;}
+  .tag{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--ink-dim);
+    border:1px solid var(--border);
+    padding:4px 10px;
+  }
+
+  .main-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:56px;
+    padding:52px 0 80px;
+    align-items:start;
+  }
+  .col h2{
+    font-family:var(--font-display);
+    font-size:1.6rem;
+    letter-spacing:0.02em;
+    margin:0 0 14px;
+  }
+  .col p{color:var(--ink-dim);margin:0 0 28px;}
+  .feature-list{display:grid;gap:10px;margin-bottom:32px;}
+  .feature-list li{
+    display:flex;gap:12px;align-items:flex-start;
+    color:var(--ink);
+    font-size:0.98rem;
+    opacity:0;
+    animation:riseIn 0.5s ease both;
+  }
+  .feature-list li:nth-child(1){animation-delay:0.1s;}
+  .feature-list li:nth-child(2){animation-delay:0.15s;}
+  .feature-list li:nth-child(3){animation-delay:0.2s;}
+  .feature-list li:nth-child(4){animation-delay:0.25s;}
+  .feature-list li:nth-child(5){animation-delay:0.3s;}
+  .feature-list li:nth-child(6){animation-delay:0.35s;}
+  .feature-list li:nth-child(7){animation-delay:0.4s;}
+  .feature-list li::before{
+    content:"";
+    flex:none;
+    width:9px;height:9px;
+    margin-top:7px;
+    background:var(--brass);
+    clip-path:polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  }
+  .req-box{
+    border-left:2px solid var(--steel);
+    padding-left:16px;
+    color:var(--ink-dim);
+    font-size:0.92rem;
+    margin-bottom:28px;
+  }
+  .req-box strong{color:var(--ink);}
+
+  .deploy-panel{
+    position:sticky;top:96px;
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    padding:26px;
+    opacity:0;
+    animation:riseIn 0.6s ease 0.15s both;
+    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+  }
+  .deploy-panel h2{margin-top:0;}
+  .code-box{
+    position:relative;
+    background:#0a0908;
+    border:1px solid var(--border);
+    padding:18px 16px;
+    margin-bottom:16px;
+    overflow-x:auto;
+  }
+  .code-box code{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    color:var(--brass-bright);
+    white-space:pre-wrap;
+    word-break:break-all;
+  }
+  .copy-btn{
+    width:100%;justify-content:center;
+    margin-bottom:24px;
+  }
+  .copy-btn[data-copied="true"]{background:var(--steel);color:#0c0b09;}
+
+  .steps{display:grid;gap:12px;counter-reset:step;}
+  .steps li{
+    list-style:none;
+    display:flex;gap:12px;
+    font-size:0.92rem;
+    color:var(--ink-dim);
+    counter-increment:step;
+  }
+  .steps li::before{
+    content:counter(step);
+    flex:none;
+    width:22px;height:22px;
+    border:1px solid var(--brass);
+    color:var(--brass-bright);
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  footer{padding:40px 0;border-top:1px solid var(--border);}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .foot-row p{margin:0;color:var(--ink-faint);font-size:0.85rem;}
+
+  /* ---------- stats box ---------- */
+  .stats-box{
+    border:1px solid var(--border);
+    padding:24px;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:22px 32px;
+    margin:24px 0 0;
+    opacity:0;
+    animation:riseIn 0.5s ease 0.25s both;
+  }
+  .stat-item .stat-label{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    color:var(--ink-faint);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .stat-item .stat-value{font-size:1.05rem;font-weight:600;color:var(--ink);}
+  .stat-item .stat-value.is-live{color:#5fbf82;display:flex;align-items:center;gap:8px;}
+  .stat-item .stat-value.is-live::before{
+    content:"";width:8px;height:8px;border-radius:50%;
+    background:#5fbf82;box-shadow:0 0 8px rgba(95,191,130,0.6);
+  }
+
+  /* ---------- extra page sections ---------- */
+  .page-section{padding:56px 0;border-top:1px solid var(--border);}
+  .page-section h2{
+    font-family:var(--font-display);
+    font-size:1.9rem;
+    letter-spacing:0.02em;
+    margin:0 0 8px;
+  }
+  .page-section h2::before{
+    content:"";display:inline-block;
+    width:20px;height:3px;
+    background:var(--brass);
+    margin-right:10px;
+    vertical-align:middle;
+  }
+  .page-section .lede-sm{color:var(--ink-dim);margin:0 0 4px;max-width:60ch;}
+
+  /* ---------- live feed ---------- */
+  .live-feed{
+    border:1px solid var(--border);
+    background:var(--bg-panel);
+    aspect-ratio:16/9;
+    max-width:520px;
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    margin-top:20px;
+    overflow:hidden;
+  }
+  .live-feed .live-tag{
+    position:absolute;top:12px;right:14px;
+    color:var(--rust);
+    font-family:var(--font-mono);
+    font-size:0.75rem;letter-spacing:0.1em;
+  }
+  .live-feed .play-btn{
+    width:64px;height:64px;border-radius:50%;
+    background:var(--brass);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;border:none;
+    transition:background 0.2s ease, transform 0.15s ease;
+  }
+  .live-feed .play-btn:hover{background:var(--brass-bright);}
+  .live-feed .play-btn:active{transform:scale(0.92);}
+  .live-feed .play-btn svg{width:22px;height:22px;fill:#191305;margin-left:3px;}
+  .live-feed-caption{color:var(--ink-faint);font-size:0.85rem;margin-top:10px;}
+
+  /* ---------- core architecture ---------- */
+  .arch-card{
+    border:1px solid var(--border);
+    border-top:2px solid var(--brass);
+    padding:26px 24px;
+    margin-top:20px;
+  }
+  .arch-card .arch-icon{
+    width:44px;height:44px;
+    background:var(--bg-panel-raised);
+    border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;
+  }
+  .arch-card .arch-icon svg{width:21px;height:21px;stroke:var(--brass-bright);}
+  .arch-card h3{font-family:var(--font-display);font-size:1.25rem;margin:0 0 8px;letter-spacing:0.01em;}
+  .arch-card p{color:var(--ink-dim);margin:0;max-width:60ch;font-size:0.95rem;}
+
+  /* ---------- update log timeline ---------- */
+  .timeline{position:relative;margin-top:24px;padding-left:28px;}
+  .timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--border);}
+  .timeline-item{position:relative;padding-bottom:32px;}
+  .timeline-item:last-child{padding-bottom:0;}
+  .timeline-item::before{
+    content:"";
+    position:absolute;left:-28px;top:4px;
+    width:12px;height:12px;
+    border-radius:50%;
+    border:2px solid var(--steel);
+    background:var(--bg-void);
+  }
+  .timeline-item.is-latest::before{
+    border-color:var(--brass-bright);
+    box-shadow:0 0 0 4px rgba(224,181,99,0.15);
+  }
+  .timeline-item .v-num{font-family:var(--font-mono);color:var(--brass-bright);font-weight:600;font-size:1.05rem;}
+  .timeline-item .v-time{color:var(--ink-faint);font-size:0.85rem;margin:2px 0 10px;}
+  .timeline-item p{color:var(--ink-dim);margin:0;max-width:60ch;font-size:0.95rem;}
+
+  @media (max-width: 860px){
+    .main-grid{grid-template-columns:1fr;}
+    .deploy-panel{position:static;}
+  }
+  #update-log{scroll-margin-top:88px;}
+  @media (min-width: 861px){
+    .nav-links-desktop{display:flex;}
+    .menu-toggle, .menu-panel, .menu-backdrop{display:none !important;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<header>
+  <nav class="nav">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.png" alt="TITANIC HUB" class="brand-mark-img">
+    </a>
+    <div class="nav-links-desktop">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#archive" class="is-active">Archive</a>
+      <a href="index.html#briefing">FAQ</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://discord.gg/your-invite" class="icon-btn" aria-label="Join Discord"><svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
+      <button class="icon-btn menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-panel" aria-label="Open menu">
+        <svg class="menu-icon-bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+        <svg class="menu-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+      </button>
+    </div>
+    <div class="menu-panel" id="menu-panel">
+      <a href="index.html" class="menu-link">Home</a>
+      <a href="index.html#archive" class="menu-link is-active">Archive</a>
+      <a href="index.html#briefing" class="menu-link">FAQ</a>
+    </div>
+  </nav>
+</header>
+<div class="menu-backdrop" id="menu-backdrop"></div>
+
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html#archive">← Back to archive</a></p>
+
+  <div class="dossier-head">
+    <span class="stamp">ACTIVE</span>
+    <h1>Attack on Titan: Revolution</h1>
+    <div class="tag-row">
+      <span class="tag">Auto-farm</span>
+      <span class="tag">Combat automation</span>
+      <span class="tag">Obsidian UI</span>
+      <span class="tag">Webhooks</span>
+    </div>
+    <div class="stats-box">
+      <div class="stat-item">
+        <span class="stat-label">Status</span>
+        <span class="stat-value is-live">Active</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Latest version</span>
+        <span class="stat-value">v1.4.2</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Last updated</span>
+        <span class="stat-value">2 hours ago</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Maintainer</span>
+        <span class="stat-value">Titanic Hub</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="col">
+      <h2>Overview</h2>
+      <p>A full automation suite for Attack on Titan: Revolution, covering everything from early-game farming to end-game prestige resets. It's been rebuilt across every major patch to keep pace with the game's remotes.</p>
+
+      <h2>What it does</h2>
+      <ul class="feature-list">
+        <li>Auto-farm routines tuned per map</li>
+        <li>Combat automation for wave and boss fights</li>
+        <li>Forest quest automation</li>
+        <li>Auto-upgrades and prestige handling</li>
+        <li>Family roll automation</li>
+        <li>Webhook notifications for key events</li>
+        <li>Obsidian-based UI</li>
+      </ul>
+
+      <div class="req-box">
+        <strong>Requirements:</strong> any Roblox executor that supports HTTP requests via <code>loadstring</code>.
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="deploy-panel">
+        <h2>Get script</h2>
+        <div class="code-box">
+          <code id="script-code">loadstring(game:HttpGet("https://raw.githubusercontent.com/yourusername/titanic-hub/main/loader.lua"))()</code>
+        </div>
+        <button class="btn copy-btn" id="copy-btn">Copy script</button>
+
+        <ol class="steps">
+          <li>Copy the script above.</li>
+          <li>Open your executor.</li>
+          <li>Paste the script and execute.</li>
+          <li>The Titanic Hub UI opens in-game.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="page-section">
+  <div class="wrap">
+    <h2>Live feed</h2>
+    <p class="lede-sm">A quick look at the automation in action.</p>
+    <div class="live-feed">
+      <span class="live-tag">REC</span>
+      <button class="play-btn" type="button" aria-label="Play demo video">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    </div>
+    <p class="live-feed-caption">Demonstration of wave-clearing automation — swap in your own clip here.</p>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="wrap">
+    <h2>Core architecture</h2>
+    <p class="lede-sm">Built for stability across long sessions, with an interface that stays out of your way.</p>
+    <div class="arch-card">
+      <div class="arch-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/><path d="M9.5 12l1.8 1.8L15 10.2"/></svg>
+      </div>
+      <h3>Modular automation core</h3>
+      <p>Farming, combat, quests, and prestige each run as independent modules, so one system updating doesn't break the others.</p>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+      </div>
+      <h3>Webhook integration</h3>
+      <p>Get a Discord ping the moment a Mythic drop or prestige milestone happens, without needing to watch the screen.</p>
+    </div>
+  </div>
+</section>
+
+<section class="page-section" id="update-log">
+  <div class="wrap">
+    <h2>Update log</h2>
+    <div class="timeline">
+      <div class="timeline-item is-latest">
+        <div class="v-num">v1.4.2</div>
+        <div class="v-time">Today</div>
+        <p>Smoothed out combat automation's target priority during wave events, and tidied up a few spacing issues in the Obsidian UI.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="v-num">v1.4.1</div>
+        <div class="v-time">3 days ago</div>
+        <p>Added webhook alerts for prestige milestones and tuned auto-farm pathing around the forest quest zone.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="v-num">v1.4.0</div>
+        <div class="v-time">1 week ago</div>
+        <p>Reworked the family roll queue for better reliability, plus general stability improvements.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <p>© <span id="year"></span> TITANIC HUB</p>
+    <p><a href="https://discord.gg/your-invite" class="icon-btn icon-btn-sm" aria-label="Join Discord"><svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a></p>
+  </div>
+</footer>
+
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+</button>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const copyBtn = document.getElementById('copy-btn');
+  const codeEl = document.getElementById('script-code');
+  copyBtn.addEventListener('click', async () => {
+    try{
+      await navigator.clipboard.writeText(codeEl.textContent);
+      copyBtn.textContent = 'Copied';
+      copyBtn.setAttribute('data-copied', 'true');
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy script';
+        copyBtn.removeAttribute('data-copied');
+      }, 1800);
+    }catch(e){
+      copyBtn.textContent = 'Press Ctrl+C to copy';
+    }
+  });
+
+  // header dropdown menu
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuPanel = document.getElementById('menu-panel');
+  const menuBackdrop = document.getElementById('menu-backdrop');
+
+  function openMenu(){
+    menuPanel.classList.add('is-open');
+    menuBackdrop.classList.add('is-open');
+    menuToggle.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu(){
+    menuPanel.classList.remove('is-open');
+    menuBackdrop.classList.remove('is-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  }
+  menuToggle.addEventListener('click', () => {
+    menuPanel.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+  menuBackdrop.addEventListener('click', closeMenu);
+  document.querySelectorAll('.menu-link').forEach(link => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
+
+  // scroll progress bar + back to top
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scrollProgress = document.getElementById('scroll-progress');
+  const backToTop = document.getElementById('back-to-top');
+  function onScroll(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+    scrollProgress.style.transform = `scaleX(${progress})`;
+    backToTop.classList.toggle('is-visible', scrollTop > 500);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+  });
+</script>
+
+</body>
+</html>

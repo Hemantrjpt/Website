@@ -411,13 +411,25 @@
     color:var(--rust);
     font-family:var(--font-mono);
     font-size:0.75rem;letter-spacing:0.1em;
+    background:rgba(12,11,9,0.55);
+    padding:3px 8px;
+    z-index:2;
   }
+  .live-feed-thumb{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 0.3s ease;
+  }
+  .live-feed-thumb.is-loaded{opacity:1;}
   .live-feed .play-btn{
     width:64px;height:64px;border-radius:50%;
     background:var(--brass);
     display:flex;align-items:center;justify-content:center;
     cursor:pointer;border:none;
     transition:background 0.2s ease, transform 0.15s ease;
+    z-index:2;
   }
   .live-feed .play-btn:hover{background:var(--brass-bright);}
   .live-feed .play-btn:active{transform:scale(0.92);}
@@ -592,7 +604,8 @@
   <div class="wrap">
     <h2 data-reveal-text>Live feed</h2>
     <p class="lede-sm">A quick look at the automation in action.</p>
-    <div class="live-feed" id="live-feed" data-reveal-img data-video-id="LOMYTUbPdHg">
+    <div class="live-feed" id="live-feed" data-reveal-img data-video="https://youtu.be/4iw2QjEiU-c?si=eo36DxViKRE8xN5e">
+      <img class="live-feed-thumb" id="live-feed-thumb" alt="Video thumbnail">
       <span class="live-tag">REC</span>
       <button class="play-btn" type="button" id="play-video-btn" aria-label="Play demo video">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
@@ -698,11 +711,25 @@
 
   // click-to-load YouTube embed for the live feed demo
   const liveFeed = document.getElementById('live-feed');
+  const liveFeedThumb = document.getElementById('live-feed-thumb');
   const playVideoBtn = document.getElementById('play-video-btn');
+
+  function extractYouTubeId(url){
+    if(!url) return null;
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+  }
+
+  const videoId = extractYouTubeId(liveFeed.dataset.video);
+
+  if(videoId){
+    liveFeedThumb.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    liveFeedThumb.addEventListener('load', () => liveFeedThumb.classList.add('is-loaded'));
+  }
+
   playVideoBtn.addEventListener('click', () => {
-    const videoId = liveFeed.dataset.videoId;
-    if(!videoId || videoId === 'YOUR_YOUTUBE_VIDEO_ID'){
-      showToast('Add your YouTube video ID first — see data-video-id on the live-feed element');
+    if(!videoId){
+      showToast('Paste your full YouTube link into data-video on the live-feed element');
       return;
     }
     const iframe = document.createElement('iframe');

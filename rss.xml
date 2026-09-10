@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>TITANIC HUB — Update Log</title>
+    <link>https://titanichub.vercel.app/attack-on-titan-revolution.html</link>
+    <description>Patch notes and updates for TITANIC HUB Roblox scripts.</description>
+    <language>en-us</language>
+
+    <item>
+      <title>v1.4.2</title>
+      <link>https://titanichub.vercel.app/attack-on-titan-revolution.html#update-log</link>
+      <guid isPermaLink="false">titanic-hub-v1.4.2</guid>
+      <pubDate>Fri, 11 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Smoothed out combat automation's target priority during wave events, and tidied up a few spacing issues in the Obsidian UI.</description>
+    </item>
+
+    <item>
+      <title>v1.4.1</title>
+      <link>https://titanichub.vercel.app/attack-on-titan-revolution.html#update-log</link>
+      <guid isPermaLink="false">titanic-hub-v1.4.1</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Added webhook alerts for prestige milestones and tuned auto-farm pathing around the forest quest zone.</description>
+    </item>
+
+    <item>
+      <title>v1.4.0</title>
+      <link>https://titanichub.vercel.app/attack-on-titan-revolution.html#update-log</link>
+      <guid isPermaLink="false">titanic-hub-v1.4.0</guid>
+      <pubDate>Fri, 04 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Reworked the family roll queue for better reliability, plus general stability improvements.</description>
+    </item>
+  </channel>
+</rss>

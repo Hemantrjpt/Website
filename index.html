@@ -885,7 +885,7 @@
   fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`)
     .then(res => { if(!res.ok) throw new Error('widget unavailable'); return res.json(); })
     .then(data => { statMembers.textContent = `${data.presence_count ?? '—'} online`; })
-    .catch(() => { statMembers.textContent = '—'; })
+    .catch(() => { statMembers.textContent = '1.1K+'; })
     .finally(() => { statMembers.classList.remove('skeleton'); });
 
   // no public uptime API without a monitoring service wired in — placeholder only

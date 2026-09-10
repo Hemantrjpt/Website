@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disclaimer — TITANIC HUB</title>
+<meta name="description" content="Terms of use and disclaimer for TITANIC HUB scripts.">
+<meta property="og:title" content="Disclaimer — TITANIC HUB">
+<meta property="og:description" content="Terms of use and disclaimer for TITANIC HUB scripts.">
+<meta property="og:image" content="assets/logo.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#0c0b09;
+    --bg-panel:#17140f;
+    --bg-panel-raised:#1f1a13;
+    --ink:#e9e2d1;
+    --ink-dim:#a89e8c;
+    --ink-faint:#6b6455;
+    --brass:#c8973f;
+    --brass-bright:#e0b563;
+    --steel:#5b7c8d;
+    --rust:#9c4230;
+    --border:rgba(233,226,209,0.12);
+    --font-display:'Staatliches', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg-void);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(ellipse at 20% -10%, rgba(200,151,63,0.05), transparent 55%),
+      radial-gradient(ellipse at 100% 110%, rgba(91,124,141,0.06), transparent 55%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/></svg>");
+  }
+  a{color:inherit;}
+  ::selection{background:var(--brass);color:#0c0b09;}
+  :focus-visible{outline:2px solid var(--brass-bright);outline-offset:3px;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+  header{
+    position:sticky;top:0;z-index:20;
+    background:rgba(12,11,9,0.86);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1100px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .brand-mark-img{width:36px;height:36px;flex:none;border-radius:8px;object-fit:cover;}
+
+  .breadcrumb{padding:22px 0 0;font-size:0.9rem;}
+  .breadcrumb a{color:var(--ink-dim);text-decoration:none;}
+  .breadcrumb a:hover{color:var(--brass-bright);}
+
+  .page-head{padding:20px 0 32px;border-bottom:1px solid var(--border);}
+  .page-head h1{
+    font-family:var(--font-display);
+    font-size:clamp(2.2rem, 5vw, 3rem);
+    letter-spacing:0.02em;
+    margin:0 0 10px;
+    text-transform:uppercase;
+  }
+  .page-head p{color:var(--ink-dim);margin:0;}
+
+  .legal-body{padding:36px 0 60px;}
+  .legal-body h2{
+    font-family:var(--font-display);
+    font-size:1.4rem;
+    letter-spacing:0.02em;
+    margin:36px 0 10px;
+    color:var(--ink);
+  }
+  .legal-body h2:first-child{margin-top:0;}
+  .legal-body h2::before{
+    content:"";display:inline-block;
+    width:18px;height:3px;
+    background:var(--brass);
+    margin-right:10px;
+    vertical-align:middle;
+  }
+  .legal-body p{color:var(--ink-dim);margin:0 0 14px;font-size:0.98rem;}
+  .legal-body ul{margin:0 0 14px;padding-left:22px;color:var(--ink-dim);font-size:0.98rem;}
+  .legal-body li{margin-bottom:6px;}
+  .legal-body strong{color:var(--ink);}
+  .updated-note{color:var(--ink-faint);font-size:0.85rem;margin-top:40px;padding-top:20px;border-top:1px solid var(--border);}
+
+  footer{padding:40px 0;border-top:1px solid var(--border);}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .foot-row p{margin:0;color:var(--ink-faint);font-size:0.85rem;}
+  .foot-row a{color:var(--ink-faint);text-decoration:none;}
+  .foot-row a:hover{color:var(--brass-bright);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.png" alt="TITANIC HUB" class="brand-mark-img">
+    </a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">← Back to home</a></p>
+
+  <div class="page-head">
+    <h1>Disclaimer</h1>
+    <p>Read this before using anything from the archive.</p>
+  </div>
+
+  <div class="legal-body">
+    <h2>No affiliation</h2>
+    <p>TITANIC HUB is an independent, fan-made project. It is not affiliated with, endorsed by, or connected to Roblox Corporation, the developers of any game referenced on this site, or any executor listed on the <a href="executors.html" style="color:var(--brass-bright);">Executors</a> page.</p>
+
+    <h2>Use at your own risk</h2>
+    <p>Scripts on this site interact with third-party games in ways their developers did not intend. Using them may violate the terms of service of Roblox and of individual games, and can result in warnings, restrictions, or bans on your account — up to and including permanent termination. That risk is entirely yours. If you're not comfortable with it, don't run the scripts.</p>
+    <p>We'd suggest testing on an account you're not attached to before running anything on a main, though even that isn't a guarantee.</p>
+
+    <h2>No warranty</h2>
+    <p>Everything in the archive is provided <strong>"as is,"</strong> with no warranty of any kind, express or implied — including, without limitation, warranties of merchantability, fitness for a particular purpose, or non-infringement. We don't guarantee any script will work, keep working, or be free of bugs, and we don't guarantee it's compatible with any specific executor.</p>
+
+    <h2>Limitation of liability</h2>
+    <p>To the fullest extent permitted by law, TITANIC HUB and anyone involved in maintaining it are not liable for any damages or losses arising from your use — or inability to use — anything on this site. That includes account bans, data loss, device issues, or any other direct or indirect damages.</p>
+
+    <h2>Third-party executors</h2>
+    <p>Executors listed on this site are built and maintained by separate, independent developers. We don't control their code, their update schedule, or their safety practices. Listing an executor here isn't a guarantee that it's safe — always get executors from their official source and use your own judgment.</p>
+
+    <h2>Changes to this disclaimer</h2>
+    <p>This page may be updated as the project changes. Continued use of the site after an update means you accept the current version.</p>
+
+    <h2>Contact</h2>
+    <p>Questions about any of this go through Discord — it's the fastest way to reach us.</p>
+
+    <p class="updated-note">Last updated: September 11, 2026. This page is a general disclaimer, not legal advice.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot-row">
+    <p>© <span id="year"></span> TITANIC HUB</p>
+    <p><a href="index.html#archive">Archive</a></p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

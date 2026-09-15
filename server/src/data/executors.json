@@ -1,0 +1,56 @@
+[
+  {
+    "id": "exec-1",
+    "name": "Synapse X",
+    "platform": "PC",
+    "status": "recommended",
+    "image_url": "/assets/executors/synapse-x.png",
+    "visit_url": "#",
+    "sort_order": 1
+  },
+  {
+    "id": "exec-2",
+    "name": "Script-Ware",
+    "platform": "PC",
+    "status": "supported",
+    "image_url": "/assets/executors/script-ware.png",
+    "visit_url": "#",
+    "sort_order": 2
+  },
+  {
+    "id": "exec-3",
+    "name": "Fluxus",
+    "platform": "PC",
+    "status": "supported",
+    "image_url": "/assets/executors/fluxus.png",
+    "visit_url": "#",
+    "sort_order": 3
+  },
+  {
+    "id": "exec-4",
+    "name": "KRNL",
+    "platform": "PC",
+    "status": "supported",
+    "image_url": "/assets/executors/krnl.png",
+    "visit_url": "#",
+    "sort_order": 4
+  },
+  {
+    "id": "exec-5",
+    "name": "Delta",
+    "platform": "Mobile",
+    "status": "supported",
+    "image_url": "/assets/executors/delta.png",
+    "visit_url": "#",
+    "sort_order": 5
+  },
+  {
+    "id": "exec-6",
+    "name": "Arceus X",
+    "platform": "Mobile",
+    "status": "untested",
+    "image_url": "/assets/executors/arceus-x.png",
+    "visit_url": "#",
+    "sort_order": 6
+  }
+]

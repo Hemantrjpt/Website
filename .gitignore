@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.production
+.env.local
+*.log
+
+# uploaded images — keep the folder (.gitkeep) but not what gets uploaded into it
+server/src/uploads/*
+!server/src/uploads/.gitkeep
+
+# auto-generated backup snapshots — not meant to be hand-edited or committed
+server/src/data/backups/

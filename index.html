@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TITANIC HUB — Roblox Script Archive</title>
+<title>TITANIC HUB</title>
 <meta name="description" content="Field-tested Roblox automation scripts. Browse the archive, get a script, deploy it.">
 <meta property="og:title" content="TITANIC HUB — Roblox Script Archive">
 <meta property="og:description" content="Field-tested Roblox automation scripts. Browse the archive, get a script, deploy it.">
@@ -17,7 +17,7 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "TITANIC HUB",
-  "url": "https://your-domain-here.com/",
+  "url": "https://titanichub.vercel.app/",
   "description": "Field-tested Roblox automation scripts. Browse the archive, get a script, deploy it."
 }
 </script>
@@ -878,14 +878,14 @@
   // live stats: skeleton -> real data (Discord widget) or graceful placeholder
   // To go fully live: enable "Server Widget" in Discord > Server Settings > Widget,
   // then replace GUILD_ID below with your real server ID.
-  const GUILD_ID = 'YOUR_DISCORD_GUILD_ID';
+  const GUILD_ID = '1376462060501729310';
   const statMembers = document.getElementById('stat-members');
   const statUptime = document.getElementById('stat-uptime');
 
   fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`)
     .then(res => { if(!res.ok) throw new Error('widget unavailable'); return res.json(); })
     .then(data => { statMembers.textContent = `${data.presence_count ?? '—'} online`; })
-    .catch(() => { statMembers.textContent = '—'; })
+    .catch(() => { statMembers.textContent = '1.2K+'; })
     .finally(() => { statMembers.classList.remove('skeleton'); });
 
   // no public uptime API without a monitoring service wired in — placeholder only

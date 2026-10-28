@@ -518,6 +518,8 @@
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important; transition:none !important; scroll-behavior:auto !important;}
   }
+
+  .archive-source{font:.72rem var(--font-mono);color:var(--ink-faint);margin:0 0 14px}#script-sort{max-width:210px}.archive-loading,.archive-error{grid-column:1/-1;padding:38px 20px;text-align:center;border:1px dashed var(--border);color:var(--ink-dim);border-radius:12px}.card .script-thumb{display:block;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:.86}.card .cover{position:relative;overflow:hidden}.card .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(12,11,9,.72),transparent 68%);pointer-events:none}.card .cover-index,.card .stamp{z-index:2}.card .cover-art{display:none}.card .script-tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.card .script-tag{font:.65rem var(--font-mono);border:1px solid var(--border);color:var(--ink-dim);padding:4px 7px;border-radius:4px}.card .script-meta{font:.68rem var(--font-mono);color:var(--ink-faint);margin-top:8px}.card .card-foot{display:flex;gap:8px;flex-wrap:wrap}.card .card-foot .btn{flex:1;justify-content:center}@media(max-width:560px){#script-sort{max-width:none;flex:1}}
 </style>
 </head>
 <body>
@@ -609,61 +611,18 @@
       <p>Active scripts are cleared for deployment right now. Classified ones are still in the field.</p>
     </div>
     <div class="archive-controls">
-      <input type="search" id="script-search" class="search-input" placeholder="Search scripts…" aria-label="Search scripts">
-      <div class="filter-chips" role="group" aria-label="Filter by status">
-        <button type="button" class="chip is-active" data-filter="all">All</button>
-        <button type="button" class="chip" data-filter="active">Active</button>
-        <button type="button" class="chip" data-filter="locked">Sealed</button>
+      <input type="search" id="script-search" class="search-input" placeholder="Search scripts, games, tags…" aria-label="Search scripts">
+      <div class="filter-chips" role="group" aria-label="Filter scripts">
+        <button type="button" class="chip is-active" data-filter="all">All scripts</button>
+        <button type="button" class="chip" data-filter="featured">Featured</button>
       </div>
+      <select id="script-sort" class="search-input" aria-label="Sort scripts">
+        <option value="updated">Recently updated</option><option value="title">Title A–Z</option><option value="featured">Featured first</option>
+      </select>
+      <button type="button" class="chip" id="script-refresh">Refresh</button>
     </div>
-    <div class="archive-grid">
-
-      <article class="card is-active" data-status="active">
-        <div class="cover cover-active" data-reveal-img>
-          <span class="cover-index">01</span>
-          <span class="stamp">ACTIVE</span>
-          <svg class="cover-art" viewBox="0 0 120 160" fill="none" aria-hidden="true">
-            <path d="M60 8c-14 0-24 12-24 26 0 10 5 18 5 18l-14 10c-6 4-9 11-9 18v70c0 6 5 10 10 10h64c5 0 10-4 10-10V80c0-7-3-14-9-18l-14-10s5-8 5-18c0-14-10-26-24-26z" fill="#170d09" fill-opacity="0.85"/>
-            <circle cx="48" cy="46" r="4" fill="#e0b563"/>
-            <circle cx="72" cy="46" r="4" fill="#e0b563"/>
-          </svg>
-        </div>
-        <h3 data-reveal-text>Attack on Titan: Revolution</h3>
-        <p class="desc">Auto-farm, combat automation, wave clearing, and prestige routines in one hub.</p>
-        <div class="card-foot">
-          <a href="attack-on-titan-revolution.html" class="btn btn-block">Get script</a>
-        </div>
-      </article>
-
-      <article class="card" data-status="locked">
-        <div class="cover cover-locked" data-reveal-img>
-          <span class="cover-index">02</span>
-          <span class="stamp locked">CLASSIFIED</span>
-          <span class="cover-seal">FILE SEALED</span>
-        </div>
-        <h3 data-reveal-text>Script #002</h3>
-        <p class="game-tag">Sealed</p>
-        <p class="desc">Details sealed until deployment. Check the Discord for progress updates.</p>
-        <div class="card-foot">
-          <button class="btn-locked" disabled>Locked</button>
-        </div>
-      </article>
-
-      <article class="card" data-status="locked">
-        <div class="cover cover-locked" data-reveal-img>
-          <span class="cover-index">03</span>
-          <span class="stamp locked">CLASSIFIED</span>
-          <span class="cover-seal">FILE SEALED</span>
-        </div>
-        <h3 data-reveal-text>Script #003</h3>
-        <p class="game-tag">Sealed</p>
-        <p class="desc">Details sealed until deployment. Check the Discord for progress updates.</p>
-        <div class="card-foot">
-          <button class="btn-locked" disabled>Locked</button>
-        </div>
-      </article>
-
-    </div>
+    <p class="archive-source" id="archive-source">Connecting to the live script archive…</p>
+    <div class="archive-grid" id="archive-grid" aria-live="polite"><div class="archive-loading">Loading published scripts…</div></div>
     <p class="archive-empty" id="archive-empty">No scripts match your search.</p>
   </div>
 </section>
@@ -963,5 +922,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/cms-public.js"></script>
+<script src="assets/script-archive.js" defer></script>
 </body>
 </html>

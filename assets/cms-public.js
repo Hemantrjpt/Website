@@ -37,6 +37,7 @@ async function settings(){
  const map=Object.fromEntries(data.map(x=>[x.key,x.value]));
  if(map.site_name){document.querySelectorAll('.brand strong,.top strong').forEach(el=>{if(el.textContent.trim()==='TITANIC HUB')el.textContent=String(map.site_name)})}
  if(map.community_url){const url=safeUrl(typeof map.community_url==='string'?map.community_url:'');if(url)document.querySelectorAll('a[href*="discord.com/invite/"],a[data-community-link]').forEach(a=>a.href=url)}
+ const old=document.getElementById('cms-setting-banner');if(old)old.remove();const banner=String(map.announcement_banner||'').trim();if(banner){const bar=document.createElement('aside');bar.id='cms-setting-banner';bar.textContent=banner;bar.style.cssText='position:relative;z-index:18;text-align:center;padding:10px 18px;background:#17130d;border-bottom:1px solid rgba(200,151,63,.2);color:#e0b563;font:500 .82rem Inter,sans-serif;line-height:1.5';const header=document.querySelector('header');if(header)header.insertAdjacentElement('afterend',bar);else document.body.prepend(bar)}
 }
 async function announcements(){
  const {data,error}=await db.from('announcements').select('id,title,body,tone,status,starts_at,ends_at,created_at').eq('status','published').order('created_at',{ascending:false}).limit(20);

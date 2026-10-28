@@ -54,7 +54,7 @@
       const platformLabel = item.platform || 'Unknown platform';
       return '<article class="weao-card">' +
         '<div class="weao-card-head">' +
-          (logo ? '<img class="weao-logo" src="' + esc(logo) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'weao-logo-fallback\',textContent:' + JSON.stringify((item.title || '?').slice(0,1).toUpperCase()) + '}))">' : '<span class="weao-logo-fallback" aria-hidden="true">' + esc((item.title || '?').slice(0,1).toUpperCase()) + '</span>') +
+          (logo ? '<img class="weao-logo" src="' + esc(logo) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\'"><span class="weao-logo-fallback" aria-hidden="true" style="display:none">' + esc((item.title || '?').slice(0,1).toUpperCase()) + '</span>' : '<span class="weao-logo-fallback" aria-hidden="true">' + esc((item.title || '?').slice(0,1).toUpperCase()) + '</span>') +
           '<div style="min-width:0"><div class="weao-title">' + esc(item.title) + '</div><div class="weao-version">' + esc(item.version ? 'Version ' + item.version : 'Version not provided') + '</div></div>' +
         '</div>' +
         '<div class="weao-status-row">' + detectBadge + updateBadge + '</div>' +

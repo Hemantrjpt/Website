@@ -847,14 +847,13 @@
   // archive search + filter
   const searchInput = document.getElementById('script-search');
   const filterChips = document.querySelectorAll('.chip');
-  const archiveCards = document.querySelectorAll('#archive .card');
   const archiveEmpty = document.getElementById('archive-empty');
   let currentFilter = 'all';
 
   function applyArchiveFilter(){
     const query = searchInput.value.trim().toLowerCase();
     let visibleCount = 0;
-    archiveCards.forEach(card => {
+    document.querySelectorAll('#archive .card').forEach(card => {
       const title = card.querySelector('h3').textContent.toLowerCase();
       const status = card.dataset.status;
       const matchesQuery = !query || title.includes(query);
@@ -885,14 +884,12 @@
   fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`)
     .then(res => { if(!res.ok) throw new Error('widget unavailable'); return res.json(); })
     .then(data => { statMembers.textContent = `${data.presence_count ?? '—'} online`; })
-    .catch(() => { statMembers.textContent = '1.2K+'; })
+    .catch(() => { statMembers.textContent = 'Unavailable'; })
     .finally(() => { statMembers.classList.remove('skeleton'); });
 
-  // no public uptime API without a monitoring service wired in — placeholder only
-  setTimeout(() => {
-    statUptime.textContent = '99.9%';
-    statUptime.classList.remove('skeleton');
-  }, 900);
+  // Uptime is only displayed when a real monitoring provider is connected.
+  statUptime.textContent = 'Not connected';
+  statUptime.classList.remove('skeleton');
 
   // scroll-linked zoom & parallax reveal (text scales in, images zoom + drift), like aotrevolution.com
   const revealTextEls = document.querySelectorAll('[data-reveal-text]');
@@ -964,5 +961,7 @@
   });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/cms-public.js"></script>
 </body>
 </html>

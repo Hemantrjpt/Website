@@ -846,15 +846,24 @@
   // live stats: skeleton -> real data (Discord widget) or graceful placeholder
   // To go fully live: enable "Server Widget" in Discord > Server Settings > Widget,
   // then replace GUILD_ID below with your real server ID.
+  // Live counts require the Discord server ID and Server Widget enabled.
+  // Until configured, keep the stat honest and avoid displaying a broken "Unavailable" state.
   const GUILD_ID = '';
   const statMembers = document.getElementById('stat-members');
   const statUptime = document.getElementById('stat-uptime');
 
-  if (!statMembers.dataset.cmsOverride) fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`)
-    .then(res => { if(!res.ok) throw new Error('widget unavailable'); return res.json(); })
-    .then(data => { statMembers.textContent = `${data.presence_count ?? '—'} online`; })
-    .catch(() => { statMembers.textContent = 'Unavailable'; })
-    .finally(() => { if (!statMembers.dataset.cmsOverride) statMembers.classList.remove('skeleton'); });
+  if (!statMembers.dataset.cmsOverride) {
+    if (GUILD_ID) {
+      fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`)
+        .then(res => { if(!res.ok) throw new Error('Discord server widget is disabled or unavailable'); return res.json(); })
+        .then(data => { statMembers.textContent = `${data.presence_count ?? '—'} online`; })
+        .catch(() => { statMembers.textContent = 'Set in Admin'; })
+        .finally(() => { if (!statMembers.dataset.cmsOverride) statMembers.classList.remove('skeleton'); });
+    } else {
+      statMembers.textContent = 'Set in Admin';
+      statMembers.classList.remove('skeleton');
+    }
+  }
 
   // Uptime is only displayed when a real monitoring provider is connected.
   statUptime.textContent = 'Not connected';

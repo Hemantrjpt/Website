@@ -818,6 +818,31 @@
     });
   });
 
+  document.addEventListener('titanichub:site-settings', event => {
+    const data = event.detail || {};
+    if (Array.isArray(data.terminal_lines) && data.terminal_lines.length === 3) {
+      ['t1','t2','t3'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) el.dataset.cmsText = String(data.terminal_lines[i] ?? '');
+      });
+      // Update text values used by the terminal animation, including if settings arrive late.
+      lines.forEach((line, i) => {
+        if (line.el) line.text = String(data.terminal_lines[i] ?? '');
+      });
+    }
+    const members = document.getElementById('stat-members');
+    const uptime = document.getElementById('stat-uptime');
+    if (members && typeof data.discord_members_text === 'string' && data.discord_members_text.trim()) {
+      members.textContent = data.discord_members_text.trim();
+      members.dataset.cmsOverride = 'true';
+      members.classList.remove('skeleton');
+    }
+    if (uptime && typeof data.uptime_text === 'string' && data.uptime_text.trim()) {
+      uptime.textContent = data.uptime_text.trim();
+      uptime.classList.remove('skeleton');
+    }
+  });
+
   // live stats: skeleton -> real data (Discord widget) or graceful placeholder
   // To go fully live: enable "Server Widget" in Discord > Server Settings > Widget,
   // then replace GUILD_ID below with your real server ID.
@@ -825,11 +850,11 @@
   const statMembers = document.getElementById('stat-members');
   const statUptime = document.getElementById('stat-uptime');
 
-  fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`)
+  if (!statMembers.dataset.cmsOverride) fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`)
     .then(res => { if(!res.ok) throw new Error('widget unavailable'); return res.json(); })
     .then(data => { statMembers.textContent = `${data.presence_count ?? '—'} online`; })
     .catch(() => { statMembers.textContent = 'Unavailable'; })
-    .finally(() => { statMembers.classList.remove('skeleton'); });
+    .finally(() => { if (!statMembers.dataset.cmsOverride) statMembers.classList.remove('skeleton'); });
 
   // Uptime is only displayed when a real monitoring provider is connected.
   statUptime.textContent = 'Not connected';

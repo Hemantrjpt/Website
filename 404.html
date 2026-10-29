@@ -129,6 +129,7 @@
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;}
   }
+.nav{display:flex;align-items:center;justify-content:space-between}.icon-btn{width:44px;height:44px;display:grid;place-items:center;background:#1b191c;border:1px solid #37332e;border-radius:12px;text-decoration:none}.youtube-icon{width:20px;height:20px;display:block}
 </style>
 </head>
 <body>
@@ -138,6 +139,7 @@
     <a href="index.html" class="brand">
       <img src="assets/logo.png" alt="TITANIC HUB" class="brand-mark-img">
     </a>
+    <div class="nav-actions" style="display:flex;gap:10px;align-items:center"><a data-youtube-link class="icon-btn" aria-label="Visit YouTube" target="_blank" rel="noopener noreferrer" hidden><svg class="youtube-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#FF0033" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.016 3.016 0 0 0 .502 6.186C0 8.07 0 12 .502 17.814a3.016 3.016 0 0 0 2.121 2.136C4.495 20.455 12 20.455 12 20.455s7.505 0 9.376-.505a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/><path fill="#fff" d="m9.545 15.568 6.227-3.568-6.227-3.568v7.136Z"/></svg></a></div>
   </nav>
 </header>
 
@@ -165,5 +167,6 @@
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
+<script src="assets/site-content.js"></script>
 </body>
 </html>

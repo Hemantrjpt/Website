@@ -11,6 +11,6 @@ module.exports = async function handler(req, res) {
     const response=await fetch(endpoint,{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY,Accept:'application/json'}});
     if(response.ok){const records=await response.json();for(const record of records){if(!record||!/^[a-z0-9-]+$/i.test(String(record.slug||'')))continue;const url=new URL(SITE+'/script.html');url.searchParams.set('slug',record.slug);const date=record.updated_at||record.published_at;urls.push({loc:url.href,lastmod:date&&!Number.isNaN(Date.parse(date))?new Date(date).toISOString():null,changefreq:'weekly',priority:'0.8'});}}
   } catch(error) { console.error('Sitemap script listing failed:',error); }
-  const entries=urls.map(item=>'  <url>\\n    <loc>'+xml(item.loc)+'</loc>'+(item.lastmod?'\\n    <lastmod>'+xml(item.lastmod)+'</lastmod>':'')+'\\n    <changefreq>'+item.changefreq+'</changefreq>\\n    <priority>'+item.priority+'</priority>\\n  </url>').join('\\n');
-  res.statusCode=200;res.end('<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n'+entries+'\\n</urlset>');
+  const entries=urls.map(item=>'  <url>\n    <loc>'+xml(item.loc)+'</loc>'+(item.lastmod?'\n    <lastmod>'+xml(item.lastmod)+'</lastmod>':'')+'\n    <changefreq>'+item.changefreq+'</changefreq>\n    <priority>'+item.priority+'</priority>\n  </url>').join('\n');
+  res.statusCode=200;res.end('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+entries+'\n</urlset>');
 };

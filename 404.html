@@ -130,6 +130,12 @@
     *{transition:none !important;}
   }
 .nav{display:flex;align-items:center;justify-content:space-between}.icon-btn{width:44px;height:44px;display:grid;place-items:center;background:#1b191c;border:1px solid #37332e;border-radius:12px;text-decoration:none}.youtube-icon{width:20px;height:20px;display:block}
+
+/* Opaque header and consistent social icon buttons */
+header{background:#0c0b09!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.nav-actions .icon-btn{background:#17140f!important;background-image:none!important;border:1px solid var(--line);border-radius:9px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 40px;width:40px;height:40px;overflow:hidden;isolation:isolate}
+.nav-actions .icon-btn svg{display:block;width:20px;height:20px;flex:none;background:transparent!important;position:relative;z-index:1}
+.nav-actions .discord-icon{fill:#5865f2!important}.nav-actions .youtube-icon{fill:#ff0033!important}
 </style>
 </head>
 <body>

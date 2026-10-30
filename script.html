@@ -50,6 +50,23 @@ header{background:#0c0b09!important;backdrop-filter:none!important;-webkit-backd
 .nav-actions .icon-btn svg{display:block;width:20px;height:20px;flex:none;background:transparent!important;position:relative;z-index:1}
 .nav-actions .discord-icon{fill:#5865f2!important}
 .nav-actions .youtube-icon{fill:#ff0033!important}
+
+/* Mobile navigation: show exactly one toggle icon and keep links closed by default */
+@media (max-width: 860px){
+  .nav-links,.nav-links-desktop{display:none!important}
+  .menu-toggle{display:inline-flex!important;position:relative;z-index:32}
+  .menu-toggle .menu-icon-bars{display:block!important}
+  .menu-toggle .menu-icon-close{display:none!important}
+  .menu-toggle[aria-expanded="true"] .menu-icon-bars{display:none!important}
+  .menu-toggle[aria-expanded="true"] .menu-icon-close{display:block!important}
+  .menu-panel{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+  .menu-panel.is-open{visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+  .menu-backdrop{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+  .menu-backdrop.is-open{visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+}
+@media (min-width: 861px){
+  .menu-toggle,.menu-panel,.menu-backdrop{display:none!important;visibility:hidden!important}
+}
 </style>
 </head>
 <body>

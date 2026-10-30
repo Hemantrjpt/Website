@@ -295,6 +295,20 @@
   }
   .section-head p{color:var(--ink-dim);margin:0;font-size:1.02rem;}
 
+  /* ---------- compact SEO guide ---------- */
+  .seo-guide{padding:54px 0 58px;background:linear-gradient(180deg,rgba(196,155,76,.045),transparent); }
+  .seo-guide-heading{max-width:680px;margin:0 0 24px;}
+  .seo-guide-kicker{display:block;color:var(--brass);font:600 .68rem var(--font-mono);letter-spacing:.16em;margin-bottom:12px;}
+  .seo-guide-heading h2{font-family:var(--font-display);font-size:clamp(1.65rem,3vw,2.25rem);line-height:1.12;letter-spacing:.015em;margin:0 0 10px;color:var(--ink);}
+  .seo-guide-heading h2::before{content:none;}
+  .seo-guide-heading p{color:var(--ink-dim);font-size:.96rem;line-height:1.6;margin:0;}
+  .seo-guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+  .seo-guide-card{position:relative;padding:20px 20px 22px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:10px;min-height:154px;}
+  .seo-guide-number{color:var(--brass);font:600 .68rem var(--font-mono);letter-spacing:.12em;}
+  .seo-guide-card h3{font-size:1.02rem;line-height:1.3;margin:12px 0 8px;color:var(--ink);}
+  .seo-guide-card p{font-size:.88rem;line-height:1.65;color:var(--ink-dim);margin:0;}
+  @media(max-width:760px){.seo-guide{padding:42px 0}.seo-guide-grid{grid-template-columns:1fr}.seo-guide-card{min-height:0;padding:17px}.seo-guide-heading{margin-bottom:19px}}
+  
   /* ---------- archive cards ---------- */
   .archive-controls{
     display:flex;flex-wrap:wrap;gap:16px;
@@ -614,20 +628,27 @@
 
 <section class="seo-guide" id="roblox-script-guide">
   <div class="wrap">
-    <div class="section-head" data-reveal-text>
-      <h2>Recon-grade automation for Roblox: archive guide</h2>
-      <p>A practical starting point for exploring Roblox scripts, understanding listings, and checking compatibility before you use a resource.</p>
+    <div class="seo-guide-heading">
+      <span class="seo-guide-kicker">TITANIC HUB / FIELD NOTES</span>
+      <h2>Roblox Script Archive Guide</h2>
+      <p>Explore script listings, compare details, and find useful information before choosing a resource.</p>
     </div>
-    <div class="seo-guide-copy">
-      <h3>Explore the TITANIC HUB Roblox script archive</h3>
-      <p>TITANIC HUB is a community-focused Roblox script archive and resource directory. The phrase recon-grade automation for Roblox refers here to a clearly organised library of script information, not a guarantee about any third-party tool. The archive brings script listings together in one place, with individual pages designed to explain what each published entry is for. Instead of relying on a short title alone, visitors can review the game name, description, available features, version information, requirements, update details, and publisher-provided resources when those details are available. Use the search and filtering controls to find an entry by title, game, or related tags.</p>
-      <h3>What to check on every script page</h3>
-      <p>Before choosing a resource, read its complete description and check the supported game, version, requirements, and latest update information. Review the listed features and installation notes so you understand the intended functionality. A script page may also include an architecture overview, changelog, screenshots, or a tutorial feed. These details can vary by publisher and by entry; missing information should not be treated as a compatibility guarantee. If a listing links to an external download or service, verify that destination independently and use the publisher's official source.</p>
-      <h3>Executor directory and compatibility</h3>
-      <p>The executor directory is a separate reference area for platform and publisher information. Compatibility can change when Roblox, an executor, or a script is updated. Check the current information from the software publisher rather than assuming that an older listing is still accurate. Be cautious with downloads, never share account credentials or verification codes, and avoid files or websites that request unnecessary permissions. TITANIC HUB is an independent community resource and is not an official Roblox website or service.</p>
-      <h3>Updates, community information, and responsible use</h3>
-      <p>Script entries may be revised as their publishers add details, change requirements, or publish new versions. Revisit the individual entry for its latest available information and read the disclaimer before using third-party resources. Community links can help visitors find announcements and ask questions, but information shared by other users should be checked against the original publisher. Respect game rules, platform terms, intellectual property, and the rights of other players. Use this archive to research available resources, compare published information, and make informed decisions—not as a promise that every third-party tool is safe, supported, or permitted in every experience.</p>
-      <p>Whether you are browsing the Roblox script archive for a specific game or learning how executor listings are organised, start with the details on each page. Clear descriptions, current version notes, transparent requirements, and reliable source links make a resource easier to evaluate. TITANIC HUB aims to keep those details accessible in a single, searchable directory.</p>
+    <div class="seo-guide-grid">
+      <article class="seo-guide-card">
+        <span class="seo-guide-number">01</span>
+        <h3>Explore the archive</h3>
+        <p>Browse Roblox scripts in one searchable directory. Each listing can include its game, features, version, requirements, and publisher notes.</p>
+      </article>
+      <article class="seo-guide-card">
+        <span class="seo-guide-number">02</span>
+        <h3>Check compatibility</h3>
+        <p>Read the description and update details before use. Compatibility may change when a game or third-party tool is updated.</p>
+      </article>
+      <article class="seo-guide-card">
+        <span class="seo-guide-number">03</span>
+        <h3>Use trusted sources</h3>
+        <p>Verify external links with the original publisher. TITANIC HUB is an independent community directory, not an official Roblox service.</p>
+      </article>
     </div>
   </div>
 </section>

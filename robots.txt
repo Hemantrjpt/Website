@@ -1,5 +1,1 @@
-User-agent: *
-Allow: /
-Disallow: /404.html
-
-Sitemap: https://your-domain-here.com/sitemap.xml
+User-agent: *\nAllow: /\nDisallow: /404.html\nDisallow: /control-center.html\n\nSitemap: https://titanichub.vercel.app/api/sitemap.xml\n

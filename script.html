@@ -112,7 +112,7 @@ const query=db.from('scripts').select('id,title,slug,game_name,description,scrip
 const result=await Promise.race([query,new Promise((_,reject)=>setTimeout(()=>reject(new Error('The archive request timed out. Please refresh and try again.')),12000))]);
 if(result.error)throw new Error('The published script library could not be reached. Please try again later.');
 if(!result.data)throw new Error('This script is not published or may have been removed.');
-const viewResult=await db.rpc('increment_script_view',{p_slug:slug});if(!viewResult.error&&typeof viewResult.data==='number')result.data.views=viewResult.data;renderDossier(result.data);
+renderDossier(result.data);db.rpc('increment_script_view',{p_slug:slug}).then(viewResult=>{if(viewResult.error)console.warn('View counter update failed:',viewResult.error.message)}).catch(error=>console.warn('View counter update failed:',error));
 }catch(e){renderError(e?.message||'Could not load this archive entry.')}
 })();
 })();

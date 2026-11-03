@@ -1,0 +1,1 @@
+export type CatalogItem={id:string;slug:string;title:string;kind:"script"|"plugin"|"asset"|"tutorial";summary:string;body:string;cover_path:string|null;download_path:string|null;external_url:string|null;is_published:boolean;is_featured:boolean;created_at:string};
